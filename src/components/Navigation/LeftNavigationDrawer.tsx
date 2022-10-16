@@ -1,5 +1,6 @@
 import { Box, Text } from "@chakra-ui/react";
-import { MdCategory } from "react-icons/md";
+import { MdCategory, MdCircle } from "react-icons/md";
+import { useDynamicFormContext } from "../../contexts/DynamicFormContext";
 import LeftMenuLink from "./LeftMenuLink";
 
 const MenuSpacer = () => {
@@ -7,6 +8,8 @@ const MenuSpacer = () => {
 };
 
 const LeftNavigationDrawer = () => {
+  const { categoryForms } = useDynamicFormContext();
+
   return (
     <Box
       pos="sticky"
@@ -23,18 +26,24 @@ const LeftNavigationDrawer = () => {
         <NavDrawerHeader />
         <MenuSpacer />
         <LeftMenuLink
-          label="Add Category"
+          label="Categories"
           to="/"
           icon={<MdCategory size="20px" />}
           exact
         />
         <MenuSpacer />
-        <LeftMenuLink
-          label="All Categories"
-          to="/categories"
-          icon={<MdCategory size="20px" />}
-        />
-        <MenuSpacer />
+
+        {categoryForms.map((categoryForm) => {
+          return (
+            <LeftMenuLink
+              label={categoryForm.categoryName}
+              to={`/item/${categoryForm.id}`}
+              icon={<MdCircle size="10px" />}
+              exact
+              key={categoryForm.id}
+            />
+          );
+        })}
       </Box>
     </Box>
   );

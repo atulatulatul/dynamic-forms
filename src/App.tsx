@@ -1,13 +1,16 @@
 import { Box } from "@chakra-ui/react";
 import { Switch } from "react-router-dom";
+import DynamicFormProvider from "./contexts/DynamicFormContext";
 import Routes from "./route/Routes";
 
 function App() {
   return (
     <Box>
-      <Switch>
-        <Routes />
-      </Switch>
+      <DynamicFormProvider>
+        <Switch>
+          <Routes />
+        </Switch>
+      </DynamicFormProvider>
     </Box>
   );
 }
