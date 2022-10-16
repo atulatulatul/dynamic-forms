@@ -1,5 +1,13 @@
-import { Box, Button, Flex, FormLabel, Select } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  FormLabel,
+  IconButton,
+  Select,
+} from "@chakra-ui/react";
 import { ChangeEvent, useState } from "react";
+import { MdDelete } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import { useDynamicFormContext } from "../../contexts/DynamicFormContext";
@@ -57,13 +65,12 @@ const CategoryAddEditForm = ({
     }
 
     // check if the category is being edited
-    if (categoryId) {
+    if (categoryId && categoryFormDefaultValue) {
       editCategoryForm(categoryId, {
-        id: uuid(),
-        titleId: titleId,
-        categoryName: categoryName!,
+        ...categoryFormDefaultValue,
+        categoryName,
+        titleId,
         formFields,
-        items: [],
       });
       redirect(RedirectLocation.categoryListing());
       return;
@@ -77,6 +84,15 @@ const CategoryAddEditForm = ({
       items: [],
     });
     redirect(RedirectLocation.categoryListing());
+  };
+
+  const deleteField = (indexToDelete: number) => {
+    const fields = [...formFields];
+    if (titleId === fields[indexToDelete].id) {
+      setTitleId(undefined);
+    }
+    fields.splice(indexToDelete, 1);
+    setFormFields([...fields]);
   };
 
   const onFormFieldValueChange = (
@@ -123,25 +139,38 @@ const CategoryAddEditForm = ({
       </Box>
 
       <Flex gap={2} alignItems="end">
-        <Box width="90%">
+        <Box width="80%">
           {formFields.map((formField, index) => {
             return (
-              <Box mb={4} key={formField.id}>
-                <CategoryField
-                  fieldId={formField.id}
-                  onAnyValueChange={(formValues: CategoryFormField) => {
-                    onFormFieldValueChange(formValues, index);
-                  }}
-                  value={formField.value}
-                  fieldType={formField.fieldType}
-                />
-              </Box>
+              <Flex mb={4} key={formField.id} alignItems="center">
+                <Box w="95%">
+                  <CategoryField
+                    fieldId={formField.id}
+                    onAnyValueChange={(formValues: CategoryFormField) => {
+                      onFormFieldValueChange(formValues, index);
+                    }}
+                    value={formField.value}
+                    fieldType={formField.fieldType}
+                  />
+                </Box>
+                <Box w={50}>
+                  <IconButton
+                    ml={2}
+                    icon={<MdDelete />}
+                    aria-label="remove"
+                    colorScheme="red"
+                    color="white"
+                    size="xs"
+                    onClick={() => deleteField(index)}
+                  />
+                </Box>
+              </Flex>
             );
           })}
         </Box>
         <Box>
           <Button onClick={addCategoryField} bg="green.600" mb={4}>
-            Add Field
+            Add
           </Button>
         </Box>
       </Flex>

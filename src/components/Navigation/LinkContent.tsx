@@ -17,7 +17,7 @@ const LinkContent = ({ active, label, icon, children, ...props }: Props) => {
       py={2}
       borderRadius={10}
       transition="0.3s"
-      bg={active ? theme.colors.customMagicBlue : "#FCFCFC"}
+      bg={active ? theme.colors.customMagicBlue : "#F7FAFC"}
       color={active ? "white" : theme.colors.customMagicBlue}
       _hover={{
         background: active ? theme.colors.customMagicBlue : "#eaecec",
