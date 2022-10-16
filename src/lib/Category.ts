@@ -18,4 +18,17 @@ export interface CategoryForm {
   titleId: string;
   categoryName: string;
   formFields: CategoryFormField[];
+  items: CategoryItemForm[];
+}
+
+export type CategoryItemFormValue = string | boolean | Date | null;
+
+export interface CategoryItemFormField {
+  [key: string]: CategoryItemFormValue;
+}
+
+export interface CategoryItemForm {
+  id: string;
+  categoryId: string;
+  formFields: CategoryItemFormField;
 }

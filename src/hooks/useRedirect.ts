@@ -9,7 +9,9 @@ type GetRedirectURLMethodName =
   | "createCategory"
   | "categoryListing"
   | "editCategory"
-  | "createItem";
+  | "createItem"
+  | "categoryItemListing"
+  | "editCategoryItem";
 
 // Maps method in case there exists some dynamic route to be added here
 export const RedirectLocation: Record<
@@ -20,6 +22,9 @@ export const RedirectLocation: Record<
   createItem: (categoryId) => `/item/${categoryId}/create`,
   editCategory: (categoryId) => `/category/${categoryId}`,
   categoryListing: () => "/",
+  categoryItemListing: (categoryId) => `/item/${categoryId}`,
+  editCategoryItem: (categoryId, categoryItemId) =>
+    `/item/${categoryId}/edit/${categoryItemId}`,
 };
 
 const useRedirect = () => {

@@ -63,6 +63,7 @@ const CategoryAddEditForm = ({
         titleId: titleId,
         categoryName: categoryName!,
         formFields,
+        items: [],
       });
       redirect(RedirectLocation.categoryListing());
       return;
@@ -73,6 +74,7 @@ const CategoryAddEditForm = ({
       titleId: titleId,
       categoryName: categoryName!,
       formFields,
+      items: [],
     });
     redirect(RedirectLocation.categoryListing());
   };

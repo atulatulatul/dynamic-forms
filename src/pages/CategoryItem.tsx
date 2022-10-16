@@ -1,5 +1,7 @@
 import { Box, Button } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
+import CategoryItemCard from "../components/CategoryItem/CategoryItemCard";
+import NotificationBox from "../components/Shared/NotificationBox";
 import PageHeader from "../components/Shared/PageHeader";
 import PageHeading from "../components/Shared/PageHeading";
 import { useDynamicFormContext } from "../contexts/DynamicFormContext";
@@ -28,6 +30,22 @@ const CategoryItem = () => {
           </Button>
         }
       />
+      {categoryForm.items.map((categoryItem) => (
+        <Box my={4} key={categoryItem.id}>
+          <CategoryItemCard
+            categoryId={categoryForm.id}
+            titleId={categoryForm.titleId}
+            categoryItem={categoryItem}
+          />
+        </Box>
+      ))}
+
+      {categoryForm.items.length === 0 && (
+        <NotificationBox
+          type="error"
+          message="You haven't added any item to this category yet."
+        />
+      )}
     </Box>
   );
 };

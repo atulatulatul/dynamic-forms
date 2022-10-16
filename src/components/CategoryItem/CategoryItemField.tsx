@@ -3,8 +3,11 @@ import styled from "@emotion/styled";
 import { ChangeEvent, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { CategoryFormField, FormFieldTypes } from "../../lib/Category";
-import { CategoryTextField } from "../Category/CategoryField";
+import {
+  CategoryFormField,
+  CategoryItemFormValue,
+  FormFieldTypes,
+} from "../../lib/Category";
 
 const StyledDatePicker = styled(DatePicker)`
   border: 1px solid #e2e8f0;
@@ -13,39 +16,86 @@ const StyledDatePicker = styled(DatePicker)`
   outline-color: #345ba6;
 `;
 
-const CategoryNumberField = ({
-  onChange,
+const CategoryItemTextField = ({
   label,
+  onChange,
+  defaultValue,
 }: {
-  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  defaultValue?: string | null;
   label?: string | null;
+  onChange: (event: string) => void;
+}) => {
+  return (
+    <>
+      {label && <FormLabel>{label}</FormLabel>}
+      <Input
+        type="text"
+        onChange={(event: ChangeEvent<HTMLInputElement>) => {
+          onChange(event.currentTarget.value);
+        }}
+        defaultValue={defaultValue ?? ""}
+      />
+    </>
+  );
+};
+
+const CategoryItemNumberField = ({
+  defaultValue,
+  label,
+  onChange,
+}: {
+  defaultValue?: string | null;
+  label?: string | null;
+  onChange: (event: string) => void;
 }) => {
   return (
     <>
       {label && <FormLabel>{label}</FormLabel>}
       <Input
         type="number"
-        borderTopRightRadius={0}
-        borderBottomRightRadius={0}
-        onChange={onChange}
+        onChange={(event: ChangeEvent<HTMLInputElement>) => {
+          onChange(event.currentTarget.value);
+        }}
+        defaultValue={defaultValue ?? ""}
       />
     </>
   );
 };
 
-const CategoryCheckboxField = ({
+const CategoryItemCheckboxField = ({
   defaultChecked = false,
   label,
+  onChange,
 }: {
-  defaultChecked?: boolean;
+  defaultChecked?: boolean | null;
   label?: string | null;
+  onChange: (isChecked: boolean) => void;
 }) => {
-  return <Checkbox defaultChecked={defaultChecked}>{label}</Checkbox>;
+  return (
+    <Checkbox
+      defaultChecked={defaultChecked ?? false}
+      onChange={(event: ChangeEvent<HTMLInputElement>) => {
+        onChange(event.currentTarget.checked);
+      }}
+    >
+      {label}
+    </Checkbox>
+  );
 };
 
-const CategoryDateField = ({ label }: { label?: string | null }) => {
+const CategoryItemDateField = ({
+  label,
+  onChange,
+  defaultValue,
+}: {
+  defaultValue?: Date | null;
+  label?: string | null;
+  onChange: (date: Date) => void;
+}) => {
   // const [startDate, setStartDate] = useState(new Date());
-  const [date, setDate] = useState<Date>();
+  const [date, setDate] = useState<Date | undefined>(
+    defaultValue ? new Date(defaultValue) : undefined
+  );
 
   return (
     <>
@@ -53,28 +103,59 @@ const CategoryDateField = ({ label }: { label?: string | null }) => {
 
       <StyledDatePicker
         selected={date}
-        onChange={(date: Date) => setDate(date)}
+        onChange={(date: Date) => {
+          setDate(date);
+          onChange(date);
+        }}
       />
     </>
   );
 };
 
 interface CategoryItemFieldProps {
+  defaultValue?: CategoryItemFormValue;
   categoryFormField: CategoryFormField;
+  onFormValueChange: (formValue: CategoryItemFormValue) => void;
 }
 
-const CategoryItemField = ({ categoryFormField }: CategoryItemFieldProps) => {
-  const onChange = () => {
-    console.log("This is changed");
+const CategoryItemField = ({
+  categoryFormField,
+  onFormValueChange,
+  defaultValue,
+}: CategoryItemFieldProps) => {
+  const onChange = (formValue: CategoryItemFormValue) => {
+    onFormValueChange(formValue);
   };
 
   const FIELD_TYPE_COMPONENT_MAPPING: Record<FormFieldTypes, JSX.Element> = {
     TEXT: (
-      <CategoryTextField onChange={onChange} label={categoryFormField.value} />
+      <CategoryItemTextField
+        onChange={onChange}
+        label={categoryFormField.value}
+        defaultValue={defaultValue as string | undefined}
+      />
     ),
-    DATE: <CategoryDateField label={categoryFormField.value} />,
-    NUMBER: <CategoryNumberField label={categoryFormField.value} />,
-    CHECKBOX: <CategoryCheckboxField label={categoryFormField.value} />,
+    DATE: (
+      <CategoryItemDateField
+        label={categoryFormField.value}
+        onChange={onChange}
+        defaultValue={defaultValue as Date | undefined | null}
+      />
+    ),
+    NUMBER: (
+      <CategoryItemNumberField
+        label={categoryFormField.value}
+        onChange={onChange}
+        defaultValue={defaultValue as string | undefined}
+      />
+    ),
+    CHECKBOX: (
+      <CategoryItemCheckboxField
+        label={categoryFormField.value}
+        onChange={onChange}
+        defaultChecked={defaultValue as boolean | undefined | null}
+      />
+    ),
   };
 
   return (

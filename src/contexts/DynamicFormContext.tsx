@@ -1,6 +1,22 @@
 import { find, findIndex } from "lodash";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { CategoryForm } from "../lib/Category";
+import {
+  CategoryForm,
+  CategoryItemForm,
+  CategoryItemFormField,
+} from "../lib/Category";
+
+const getCategoryById = ({
+  categoryFormId,
+  categoryForms,
+}: {
+  categoryFormId: string;
+  categoryForms: CategoryForm[];
+}) =>
+  findIndex(
+    categoryForms,
+    (categoryForm) => categoryForm.id === categoryFormId
+  );
 
 export interface DynamicFormContextProps {
   categoryForms: CategoryForm[];
@@ -11,6 +27,26 @@ export interface DynamicFormContextProps {
     categoryFormId: string,
     updatedCategoryForm: CategoryForm
   ) => void;
+  addCategoryItem: (
+    categoryFormId: string,
+    CategoryItemForm: CategoryItemForm
+  ) => void;
+  editCategoryItem: ({
+    categoryFormId,
+    categoryItemId,
+    formFields,
+  }: {
+    categoryFormId: string;
+    categoryItemId: string;
+    formFields: CategoryItemFormField;
+  }) => void;
+  deleteCategoryItem: ({
+    categoryFormId,
+    categoryItemFormId,
+  }: {
+    categoryFormId: string;
+    categoryItemFormId: string;
+  }) => void;
 }
 
 const dynamicFormInitialState = {
@@ -19,6 +55,9 @@ const dynamicFormInitialState = {
   deleteCategoryForm: () => {},
   getCategoryForm: () => ({} as CategoryForm | undefined),
   editCategoryForm: () => {},
+  addCategoryItem: () => {},
+  editCategoryItem: () => {},
+  deleteCategoryItem: () => {},
 };
 
 const DynamicFormContext = createContext<DynamicFormContextProps>(
@@ -38,10 +77,10 @@ const DynamicFormProvider = ({ children }: { children: React.ReactNode }) => {
   const deleteCategoryForm = (categoryFormId: string) => {
     const catForms = [...categoryForms];
 
-    const elementIndexToDelete = findIndex(
-      catForms,
-      (catForm) => catForm.id === categoryFormId
-    );
+    const elementIndexToDelete = getCategoryById({
+      categoryFormId,
+      categoryForms,
+    });
 
     if (elementIndexToDelete >= 0) {
       catForms.splice(elementIndexToDelete, 1);
@@ -60,14 +99,82 @@ const DynamicFormProvider = ({ children }: { children: React.ReactNode }) => {
     categoryFormId: string,
     updatedCategoryForm: CategoryForm
   ) => {
-    const categoryFormIndexToUpdate = findIndex(
+    const categoryFormIndexToUpdate = getCategoryById({
+      categoryFormId,
       categoryForms,
-      (categoryForm) => categoryForm.id === categoryFormId
-    );
+    });
 
     if (categoryFormIndexToUpdate >= 0) {
       const catForm = [...categoryForms];
       catForm[categoryFormIndexToUpdate] = updatedCategoryForm;
+      setCategoryForms([...catForm]);
+    }
+  };
+
+  const addCategoryItem = (
+    categoryFormId: string,
+    categoryItemForm: CategoryItemForm
+  ) => {
+    const categoryFormIndex = getCategoryById({
+      categoryFormId,
+      categoryForms,
+    });
+
+    if (categoryFormIndex >= 0) {
+      const catForm = [...categoryForms];
+      catForm[categoryFormIndex].items.push(categoryItemForm);
+      setCategoryForms([...catForm]);
+    }
+  };
+
+  const editCategoryItem = ({
+    categoryFormId,
+    categoryItemId,
+    formFields,
+  }: {
+    categoryFormId: string;
+    categoryItemId: string;
+    formFields: CategoryItemFormField;
+  }) => {
+    const categoryFormIndex = getCategoryById({
+      categoryFormId,
+      categoryForms,
+    });
+
+    const categoryItemIndexToEdit = findIndex(
+      categoryForms[categoryFormIndex].items,
+      (categoryItem) => categoryItem.id === categoryItemId
+    );
+
+    if (categoryItemIndexToEdit >= 0) {
+      const catForm = [...categoryForms];
+      catForm[categoryFormIndex].items[categoryItemIndexToEdit].formFields = {
+        ...formFields,
+      };
+      setCategoryForms([...catForm]);
+    }
+  };
+
+  const deleteCategoryItem = ({
+    categoryFormId,
+    categoryItemFormId,
+  }: {
+    categoryFormId: string;
+    categoryItemFormId: string;
+  }) => {
+    const categoryFormIndex = getCategoryById({
+      categoryFormId,
+      categoryForms,
+    });
+
+    const categoryItemIndexToDelete = findIndex(
+      categoryForms[categoryFormIndex].items,
+      (categoryItem) => categoryItem.id === categoryItemFormId
+    );
+
+    if (categoryItemIndexToDelete >= 0) {
+      const catForm = [...categoryForms];
+      catForm[categoryFormIndex].items.splice(categoryItemIndexToDelete, 1);
       setCategoryForms([...catForm]);
     }
   };
@@ -84,6 +191,9 @@ const DynamicFormProvider = ({ children }: { children: React.ReactNode }) => {
         deleteCategoryForm,
         getCategoryForm,
         editCategoryForm,
+        addCategoryItem,
+        editCategoryItem,
+        deleteCategoryItem,
       }}
     >
       {children}

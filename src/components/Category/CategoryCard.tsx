@@ -1,33 +1,14 @@
-import {
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
-  Button,
-  Flex,
-  HStack,
-  IconButton,
-  useDisclosure,
-} from "@chakra-ui/react";
-import { useRef } from "react";
-import { MdDelete, MdModeEdit } from "react-icons/md";
+import { Flex } from "@chakra-ui/react";
 import { useDynamicFormContext } from "../../contexts/DynamicFormContext";
 import useRedirect, { RedirectLocation } from "../../hooks/useRedirect";
 import { CategoryForm } from "../../lib/Category";
+import CardEditDeleteButton from "../Shared/CardEditDeleteButton";
 
 interface CategoryCardProps {
   categoryForm: CategoryForm;
 }
 
 const CategoryCard = ({ categoryForm }: CategoryCardProps) => {
-  const {
-    isOpen: isConfirmBoxOpen,
-    onOpen: openConfirmBox,
-    onClose: closeConfirmBox,
-  } = useDisclosure();
-  const cancelRef = useRef<HTMLButtonElement>(null);
   const { deleteCategoryForm } = useDynamicFormContext();
   const { redirect } = useRedirect();
 
@@ -42,70 +23,11 @@ const CategoryCard = ({ categoryForm }: CategoryCardProps) => {
   return (
     <Flex p={5} bg="gray.200" borderRadius={10} justifyContent="space-between">
       {categoryForm.categoryName}
-
-      <HStack spacing={2}>
-        <IconButton
-          icon={<MdModeEdit />}
-          aria-label="edit"
-          size="xs"
-          rounded="full"
-          _hover={{
-            bg: "gray.600",
-          }}
-          onClick={onEditClick}
-        />
-
-        <IconButton
-          icon={<MdDelete />}
-          aria-label="remove"
-          colorScheme="red"
-          color="white"
-          size="xs"
-          rounded="full"
-          onClick={openConfirmBox}
-        />
-      </HStack>
-
-      <AlertDialog
-        blockScrollOnMount={false}
-        isCentered
-        leastDestructiveRef={cancelRef}
-        isOpen={isConfirmBoxOpen}
-        onClose={closeConfirmBox}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Delete Category
-            </AlertDialogHeader>
-
-            <AlertDialogBody>
-              Are you sure you want to delete{" "}
-              <strong>{categoryForm.categoryName}</strong>?
-            </AlertDialogBody>
-
-            <AlertDialogFooter>
-              <Button
-                ref={cancelRef}
-                onClick={closeConfirmBox}
-                size="sm"
-                fontWeight={400}
-              >
-                Cancel
-              </Button>
-              <Button
-                colorScheme="red"
-                onClick={onDeleteClick}
-                ml={3}
-                size="sm"
-                fontWeight={400}
-              >
-                Delete
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
+      <CardEditDeleteButton
+        onDeleteClick={onDeleteClick}
+        onEditClick={onEditClick}
+        elementName={categoryForm.categoryName}
+      />
     </Flex>
   );
 };
