@@ -1,5 +1,5 @@
 import { Box, Button } from "@chakra-ui/react";
-import { find, isEmpty, some, values } from "lodash";
+import { find, isBoolean, some, values } from "lodash";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { v4 as uuid } from "uuid";
@@ -48,11 +48,15 @@ const AddEditCategoryItemForm = ({
     event.preventDefault();
 
     // At least one value is mandatory
-    const isFormEmpty =
+    const isAnyFieldEmpty =
       values(categoryItemForm).length === 0 ||
-      some(values(categoryItemForm), !isEmpty);
+      some(values(categoryItemForm), (value) => !(isBoolean(value) || !!value));
 
-    if (isFormEmpty) return showErrorToast("Error", "All fields are mandatory");
+    if (isAnyFieldEmpty)
+      return showErrorToast(
+        "Error",
+        "All fields (except checkbox) are mandatory"
+      );
 
     // If form is to be edited
     if (categoryItemId) {
