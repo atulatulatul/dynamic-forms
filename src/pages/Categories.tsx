@@ -17,9 +17,9 @@ const AddCategory = () => {
   return (
     <>
       <PageHeader
-        leftChild={<PageHeading heading="Categories" />}
+        leftChild={<PageHeading heading="Forms" />}
         rightChild={
-          <Button onClick={redirectToAddCategoryPage}>Add Category</Button>
+          <Button onClick={redirectToAddCategoryPage}>Add Form</Button>
         }
       />
 
@@ -33,7 +33,7 @@ const AddCategory = () => {
         {categoryForms.length === 0 && (
           <NotificationBox
             type="error"
-            message="You haven't added any category yet."
+            message="You haven't added any forms yet"
           />
         )}
       </Box>

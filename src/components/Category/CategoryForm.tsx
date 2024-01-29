@@ -177,7 +177,7 @@ const CategoryAddEditForm = ({
 
       <Box textAlign="center" mt={4}>
         <Button mt={4} width="50%" type="submit">
-          Save Category
+          Save Form
         </Button>
       </Box>
     </form>

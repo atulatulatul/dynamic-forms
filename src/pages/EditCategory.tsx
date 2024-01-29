@@ -15,7 +15,7 @@ const EditCategory = () => {
 
   return (
     <Box maxW={800} mx="auto">
-      <PageHeader leftChild={<PageHeading heading="Edit Category" />} />
+      <PageHeader leftChild={<PageHeading heading="Edit Form" />} />
       <CategoryAddEditForm categoryFormDefaultValue={categoryForm} />
     </Box>
   );

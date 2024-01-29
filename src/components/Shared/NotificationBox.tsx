@@ -7,7 +7,7 @@ interface NotificationBoxProps {
 
 const NotificationBox = ({
   type,
-  message = "Oops! Nothing here.",
+  message = "Oops! Nothing here",
 }: NotificationBoxProps) => {
   return (
     <Alert status={type} borderRadius={8}>

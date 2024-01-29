@@ -6,7 +6,7 @@ import PageHeading from "../components/Shared/PageHeading";
 const AddCategory = () => {
   return (
     <Box maxW={800} mx="auto">
-      <PageHeader leftChild={<PageHeading heading="Add Category" />} />
+      <PageHeader leftChild={<PageHeading heading="Add Form" />} />
       <CategoryAddEditForm />
     </Box>
   );

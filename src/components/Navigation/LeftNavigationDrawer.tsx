@@ -1,6 +1,7 @@
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Flex, Image } from "@chakra-ui/react";
 import { MdCategory, MdCircle, MdTableView } from "react-icons/md";
 import { useDynamicFormContext } from "../../contexts/DynamicFormContext";
+import Logo from "../../images/df-logo.png";
 import LeftMenuLink from "./LeftMenuLink";
 
 const MenuSpacer = () => {
@@ -26,14 +27,14 @@ const LeftNavigationDrawer = () => {
         <NavDrawerHeader />
         <MenuSpacer />
         <LeftMenuLink
-          label="Categories"
+          label="Forms"
           to="/"
           icon={<MdCategory size="20px" />}
           exact
         />
         <MenuSpacer />
         <LeftMenuLink
-          label="Items"
+          label="Forms & Submissions"
           to="/items"
           icon={<MdTableView size="20px" />}
           exact
@@ -58,11 +59,9 @@ const LeftNavigationDrawer = () => {
 
 const NavDrawerHeader = () => {
   return (
-    <Box textAlign="center">
-      <Text fontWeight={600} fontSize={30}>
-        Forms
-      </Text>
-    </Box>
+    <Flex justifyContent="center">
+      <Image src={Logo} width={150} />
+    </Flex>
   );
 };
 

@@ -17,7 +17,7 @@ const CategoryItems = () => {
 
   return (
     <>
-      <PageHeader leftChild={<PageHeading heading="Items" />} />
+      <PageHeader leftChild={<PageHeading heading="Forms & Submissions" />} />
 
       <Accordion defaultIndex={[0]} allowMultiple>
         {categoryForms.map((categoryForm) => {
@@ -57,7 +57,7 @@ const CategoryItems = () => {
                   <Box my={4}>
                     <NotificationBox
                       type="error"
-                      message="No items added yet."
+                      message="No response added yet"
                     />
                   </Box>
                 )}
@@ -68,7 +68,10 @@ const CategoryItems = () => {
       </Accordion>
 
       {categoryForms.length === 0 && (
-        <NotificationBox type="error" message="Nothing to show." />
+        <NotificationBox
+          type="error"
+          message="Let's start by creating a form"
+        />
       )}
     </>
   );

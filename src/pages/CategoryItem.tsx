@@ -19,14 +19,14 @@ const CategoryItem = () => {
   return (
     <Box mx="auto">
       <PageHeader
-        leftChild={<PageHeading heading="Category item" />}
+        leftChild={<PageHeading heading="Form Responses" />}
         rightChild={
           <Button
             onClick={() => {
               redirect(RedirectLocation.createItem(categoryId));
             }}
           >
-            Add Item
+            Create Response
           </Button>
         }
       />
@@ -43,7 +43,7 @@ const CategoryItem = () => {
       {categoryForm.items.length === 0 && (
         <NotificationBox
           type="error"
-          message="You haven't added any item to this category yet."
+          message="No response for this form has been submitted yet"
         />
       )}
     </Box>
